@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CLERKI — Recibos &amp; Cotizaciones</title>
+  <meta name="description" content="Crea, guarda, imprime y envía recibos y cotizaciones.">
+  <meta name="theme-color" content="#EEF1F5">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="preload" href="assets/fonts/montserrat-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="tab-datos">
+  <a class="skip-link" href="#main-content">Ir al contenido</a>
+
+  <div class="sync-bar" id="sync-bar" aria-hidden="true"></div>
+
+  <div class="shell" id="shell">
+    <!-- ===== Barra superior: marca + navegación + estado global ===== -->
+    <header id="topbar">
+      <div class="brand">
+        <span class="brand-mark"><img src="assets/img/marca-clerki.svg" alt="" class="brand-logo"></span>
+        <span class="brand-text">
+          <strong class="brand-wordmark">CLERKI</strong>
+          <span>Recibos &amp; Cotizaciones</span>
+        </span>
+      </div>
+
+      <!-- El menú de escritorio vive arriba, en la misma barra: siete secciones. -->
+      <nav class="top-nav desktop-nav" aria-label="Navegación principal">
+        <button type="button" class="top-nav-item" data-action="go-home" data-nav-view="inicio">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+          <span>Inicio</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-docs" data-nav-view="docs">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+          <span>Documentos</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-cxc" data-nav-view="cxc">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5c-.7-.7-1.7-1-3-1-1.4 0-2.5.7-2.5 1.8 0 2.8 5.5 1.1 5.5 4.1 0 1.2-1.2 2.1-2.9 2.1-1.4 0-2.5-.4-3.3-1.2M12 5.5v13"/></svg>
+          <span>Por cobrar</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-cxp" data-nav-view="cxp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Por pagar</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-clientes" data-nav-view="clientes">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Directorio</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-productos" data-nav-view="productos">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <span>Catálogo</span>
+        </button>
+        <button type="button" class="top-nav-item" data-action="go-tareas" data-nav-view="tareas">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>Tareas</span>
+        </button>
+      </nav>
+
+      <div class="topbar-right">
+        <span id="sync-pill" class="sync-pill sync-off" title="Sincronización entre dispositivos">Sin cuenta</span>
+        <div class="topbar-actions">
+          <button type="button" class="icon-btn" data-action="open-cmdk" aria-label="Buscar en todo CLERKI" title="Buscar (Ctrl o Cmd + K)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+          <button id="btn-install" class="btn small outline" data-action="install" style="display:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> <span class="btn-label-wide">Instalar</span></button>
+          <button class="icon-btn" data-action="settings" aria-label="Ajustes" title="Ajustes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></button>
+        </div>
+      </div>
+    </header>
+
+      <main id="main-content" tabindex="-1">
+        <!-- ===== Vista: panel de inicio ===== -->
+        <section id="view-inicio" aria-labelledby="hero-title">
+          <!-- Saludo a sangre, como una portada: el nombre manda y la fecha
+               es una ficha con borde de tinta, no una píldora más. -->
+          <div class="home-hero">
+            <div class="home-hero-copy">
+              <h1 class="home-title" id="hero-title">Buenas tardes</h1>
+              <p class="home-sub">Aquí tienes el resumen de hoy.</p>
+            </div>
+            <p class="date-chip">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+              <span id="hero-kicker">Panel general</span>
+            </p>
+          </div>
+
+          <!-- Cuatro cifras: las dos oscuras pesan más que el resto porque son
+               el pulso del negocio (lo que se trabaja y lo que se cobra). -->
+          <div class="kpi-board">
+            <article class="kpi is-slate">
+              <p class="kpi-label">Documentos activos</p>
+              <div class="kpi-face">
+                <strong class="kpi-value" id="kpi-activos">0</strong>
+                <span class="kpi-ico" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg></span>
+              </div>
+              <button type="button" class="kpi-foot" data-action="go-docs">
+                <span>Ver todos</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </button>
+            </article>
+
+            <article class="kpi">
+              <p class="kpi-label">Por entregar</p>
+              <div class="kpi-face">
+                <strong class="kpi-value" id="kpi-entregar">0</strong>
+                <span class="kpi-ico" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span>
+              </div>
+              <button type="button" class="kpi-foot" data-action="go-docs">
+                <span id="kpi-entregar-nota">En producción y enviados</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </button>
+            </article>
+
+            <article class="kpi">
+              <p class="kpi-label">Ventas del mes</p>
+              <div class="kpi-face">
+                <strong class="kpi-value" id="kpi-ventas">$0</strong>
+                <span class="kpi-ico" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+              </div>
+              <button type="button" class="kpi-foot" data-action="go-docs">
+                <span id="kpi-ventas-nota">Ver reporte</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </button>
+            </article>
+
+            <article class="kpi is-mint">
+              <p class="kpi-label">Pendientes de cobro</p>
+              <div class="kpi-face">
+                <strong class="kpi-value" id="hero-balance-value">$0.00</strong>
+                <span class="kpi-ring" id="hero-chart-host"></span>
+              </div>
+              <button type="button" class="kpi-foot" data-action="go-cxc">
+                <span id="kpi-cobro-nota">Ver cartera</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </button>
+            </article>
+          </div>
+
+          <div class="board-head">
+            <div class="board-copy">
+              <h2 class="board-title" id="docs-curso-title">Documentos en curso</h2>
+            </div>
+            <span class="board-rule" aria-hidden="true"></span>
+            <p class="board-note" id="cob-note"></p>
+            <button type="button" class="board-note" id="cob-archivo" data-action="go-cerrados" hidden></button>
+            <button type="button" class="board-cta" data-action="go-docs">Ver todos</button>
+          </div>
+          <section class="ord-panel" aria-labelledby="docs-curso-title">
+            <div id="chart-host" class="cob-host"></div>
+          </section>
+
+          <div class="board-head">
+            <div class="board-copy">
+              <h2 class="board-title" id="shortcuts-title">Accesos rápidos</h2>
+            </div>
+            <span class="board-rule" aria-hidden="true"></span>
+            <p class="board-note">Crea en un toque</p>
+          </div>
+
+          <nav class="quick-grid" aria-labelledby="shortcuts-title">
+            <button type="button" class="quick-tile is-primary" data-action="new-recibo">
+              <span class="quick-tile-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
+              <span class="quick-tile-label">Recibo</span>
+            </button>
+            <button type="button" class="quick-tile" data-action="new-cotizacion">
+              <span class="quick-tile-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+              <span class="quick-tile-label">Cotizar</span>
+            </button>
+            <button type="button" class="quick-tile" data-action="new-cliente">
+              <span class="quick-tile-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 8v6M17 11h6"/></svg></span>
+              <span class="quick-tile-label">Cliente</span>
+            </button>
+            <button type="button" class="quick-tile" data-action="new-cxp">
+              <span class="quick-tile-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span>
+              <span class="quick-tile-label">Gasto</span>
+            </button>
+            <button type="button" class="quick-tile" data-action="new-producto">
+              <span class="quick-tile-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5v8l-9 5-9-5V8Z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></span>
+              <span class="quick-tile-label">Producto</span>
+            </button>
+          </nav>
+
+          <section class="next-card" aria-labelledby="todo-title">
+            <div class="next-head">
+              <span class="next-ico" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></span>
+              <div class="next-copy">
+                <h2 id="todo-title">Tu siguiente paso</h2>
+                <p id="todo-note"></p>
+              </div>
+              <button type="button" class="next-link" data-action="go-tareas">Ver todas <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+            </div>
+            <div id="todo-host" class="todo-host todo-host-home"></div>
+          </section>
+
+          <div class="board-head">
+            <div class="board-copy">
+              <h2 class="board-title" id="figs-title">El mes en cifras</h2>
+            </div>
+            <span class="board-rule" aria-hidden="true"></span>
+            <p class="board-note" id="figs-note"></p>
+          </div>
+          <section class="figs-panel" aria-labelledby="figs-title">
+            <div id="stat-grid" class="figs"></div>
+          </section>
+
+          <p class="workspace-foot"><span>Hecho para enfocarte en lo que importa.</span><span>CLERKI</span></p>
+        </section>
+
+        <!-- ===== Vista: documentos ===== -->
+        <section id="view-list" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">02 · Archivo general</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Documentos</h1>
+              <p class="page-desc">Cada propuesta y cada recibo, en su lugar.</p>
+            </div>
+            <div class="page-head-actions">
+              <button class="btn primary" data-action="new-recibo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo recibo</button>
+              <button class="btn outline" data-action="new-cotizacion"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva cotización</button>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar y filtrar documentos">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-1"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-1">
+              <div class="side-block">
+                <label class="side-label" for="search">Buscar</label>
+                <input id="search" type="search" placeholder="Número, proyecto, cliente…">
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="docs-filter-label">Tipo de documento</p>
+                <div class="chips chips-col" role="group" aria-labelledby="docs-filter-label">
+                  <button class="chip active" data-filter="todos" aria-pressed="true">Todos</button>
+                  <button class="chip" data-filter="recibo" aria-pressed="false">Recibos</button>
+                  <button class="chip" data-filter="cotizacion" aria-pressed="false">Cotizaciones</button>
+                </div>
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="docs-estado-label">Estado del proceso</p>
+                <div class="chips chips-col" role="group" aria-labelledby="docs-estado-label">
+                  <button class="chip active" data-estado="activos" aria-pressed="true">Activos</button>
+                  <button class="chip" data-estado="cotizado" aria-pressed="false">Cotizado</button>
+                  <button class="chip" data-estado="aprobado" aria-pressed="false">Aprobado</button>
+                  <button class="chip" data-estado="produccion" aria-pressed="false">En producción</button>
+                  <button class="chip" data-estado="enviado" aria-pressed="false">Enviado</button>
+                  <button class="chip" data-estado="entregado" aria-pressed="false">Entregado</button>
+                  <button class="chip" data-estado="pagado" aria-pressed="false">Pagado</button>
+                  <button class="chip" data-estado="devuelto" aria-pressed="false">Devuelto</button>
+                  <button class="chip" data-estado="cerrados" aria-pressed="false">Archivo (cerrados)</button>
+                </div>
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="docs-status-label">Estado de cobro</p>
+                <div class="chips chips-col" role="group" aria-labelledby="docs-status-label">
+                  <button class="chip active" data-status="todos" aria-pressed="true">Cualquiera</button>
+                  <button class="chip" data-status="pendiente" aria-pressed="false">Pendientes</button>
+                  <button class="chip" data-status="parcial" aria-pressed="false">Pago parcial</button>
+                  <button class="chip" data-status="pagado" aria-pressed="false">Liquidados</button>
+                </div>
+              </div>
+              <p class="side-hint">Por defecto se muestran los documentos activos. Los marcados como Cerrados van al archivo y dejan de aparecer en el inicio.</p></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="docs-count" role="status">—</p>
+                <p class="results-hint">Actualización más reciente primero</p>
+              </div>
+              <div id="doc-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: Cuentas por Cobrar ===== -->
+        <section id="view-cxc" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">03 · Cuentas por cobrar</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Por cobrar</h1>
+              <p class="page-desc">Dale seguimiento a tus saldos, cliente por cliente.</p>
+            </div>
+            <div class="page-head-actions">
+              <div class="head-figs">
+                <div class="head-fig is-main">
+                  <span class="head-fig-label">Total por cobrar</span>
+                  <strong id="cxc-total" class="head-fig-value">$0.00</strong>
+                </div>
+                <div class="head-fig">
+                  <span class="head-fig-label">Clientes con saldo</span>
+                  <strong id="cxc-clientes" class="head-fig-value">0</strong>
+                </div>
+              </div>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar cuentas por cobrar">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-2"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-2">
+              <div class="side-block">
+                <label class="side-label" for="search-cxc">Buscar</label>
+                <input id="search-cxc" type="search" placeholder="Cliente, proyecto, folio…">
+              </div>
+              <p class="side-hint">Los saldos se calculan solos con los recibos y cotizaciones que aún tienen monto pendiente.</p></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="cxc-count" role="status">—</p>
+                <p class="results-hint">Mayor saldo primero</p>
+              </div>
+              <div id="cxc-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: Cuentas por Pagar ===== -->
+        <section id="view-cxp" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">04 · Cuentas por pagar</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Por pagar</h1>
+              <p class="page-desc">Un espacio para tus gastos y compromisos.</p>
+            </div>
+            <div class="page-head-actions">
+              <div class="head-figs">
+                <div class="head-fig is-main">
+                  <span class="head-fig-label">Total por pagar</span>
+                  <strong id="cxp-total" class="head-fig-value">$0.00</strong>
+                </div>
+                <div class="head-fig">
+                  <span class="head-fig-label">Pendientes</span>
+                  <strong id="cxp-pendientes" class="head-fig-value">0</strong>
+                </div>
+                <div class="head-fig">
+                  <span class="head-fig-label">Pagadas</span>
+                  <strong id="cxp-pagadas" class="head-fig-value">0</strong>
+                </div>
+              </div>
+              <button class="btn primary" data-action="new-cxp"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva cuenta</button>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar y filtrar cuentas por pagar">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-3"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-3">
+              <div class="side-block">
+                <label class="side-label" for="search-cxp">Buscar</label>
+                <input id="search-cxp" type="search" placeholder="Proveedor, concepto, folio…">
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="cxp-filter-label">Estado</p>
+                <div class="chips chips-col" role="group" aria-labelledby="cxp-filter-label">
+                  <button class="chip active" data-cxp-filter="todas" aria-pressed="true">Todas</button>
+                  <button class="chip" data-cxp-filter="pendiente" aria-pressed="false">Pendientes</button>
+                  <button class="chip" data-cxp-filter="pagada" aria-pressed="false">Pagadas</button>
+                  <button class="chip" data-cxp-filter="parcial" aria-pressed="false">Pago parcial</button>
+                </div>
+              </div>
+              <p class="side-hint">Las cuentas vencidas aparecen primero, con su fecha de vencimiento.</p></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="cxp-count" role="status">—</p>
+                <p class="results-hint">Vencidas primero</p>
+              </div>
+              <div id="cxp-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: Clientes / Prospectos ===== -->
+        <section id="view-clientes" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">05 · Clientes y prospectos</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Directorio</h1>
+              <p class="page-desc">Las personas detrás de tus próximos proyectos.</p>
+            </div>
+            <div class="page-head-actions">
+              <button class="btn primary" data-action="new-cliente"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo cliente</button>
+              <button class="btn outline" data-action="new-prospecto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo prospecto</button>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar y filtrar contactos">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-4"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-4">
+              <div class="side-block">
+                <label class="side-label" for="search-cli">Buscar</label>
+                <input id="search-cli" type="search" placeholder="Nombre, empresa, email, teléfono…">
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="cli-filter-label">Tipo de contacto</p>
+                <div class="chips chips-col" role="group" aria-labelledby="cli-filter-label">
+                  <button class="chip active" data-cli-filter="todos" aria-pressed="true">Todos</button>
+                  <button class="chip" data-cli-filter="cliente" aria-pressed="false">Clientes</button>
+                  <button class="chip" data-cli-filter="prospecto" aria-pressed="false">Prospectos</button>
+                </div>
+              </div>
+              <p class="side-hint">Al guardar un contacto lo reutilizas en el editor con el selector «Cliente guardado».</p></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="cli-count" role="status">—</p>
+                <p class="results-hint">Orden alfabético</p>
+              </div>
+              <div id="cli-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: Productos y servicios ===== -->
+        <section id="view-productos" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">06 · Catálogo</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Productos y servicios</h1>
+              <p class="page-desc">Todo lo que creas, listo para cotizar.</p>
+            </div>
+            <div class="page-head-actions">
+              <button class="btn primary" data-action="new-producto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo producto</button>
+              <button class="btn outline" data-action="new-servicio"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo servicio</button>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar y filtrar el catálogo">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-5"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-5">
+              <div class="side-block">
+                <label class="side-label" for="search-prod">Buscar</label>
+                <input id="search-prod" type="search" placeholder="Nombre, clave, unidad, característica…">
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="prod-filter-label">Tipo de ítem</p>
+                <div class="chips chips-col" role="group" aria-labelledby="prod-filter-label">
+                  <button class="chip active" data-prod-filter="todos" aria-pressed="true">Todos</button>
+                  <button class="chip" data-prod-filter="producto" aria-pressed="false">Productos</button>
+                  <button class="chip" data-prod-filter="servicio" aria-pressed="false">Servicios</button>
+                </div>
+              </div>
+              <p class="side-hint">Al agregarlo a un documento se copian precio, unidad y características.</p></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="prod-count" role="status">—</p>
+                <p class="results-hint">Orden alfabético</p>
+              </div>
+              <div id="prod-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: Tareas ===== -->
+        <section id="view-tareas" hidden>
+          <header class="page-head">
+            <div class="page-head-main">
+              <div class="page-kicker">
+                <p class="kicker">07 · Tareas</p>
+                <button class="btn small quiet section-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                  <span>Inicio</span>
+                </button>
+              </div>
+              <h1>Tareas</h1>
+              <p class="page-desc">Organiza tus ideas. Dale claridad a tu día.</p>
+            </div>
+            <div class="page-head-actions">
+              <div class="head-figs" id="tareas-summary"></div>
+              <button class="btn primary" data-action="new-tarea"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva tarea</button>
+            </div>
+          </header>
+          <div class="page-grid">
+            <aside class="page-side" aria-label="Buscar y filtrar tareas">
+              <button type="button" class="side-title side-toggle" data-action="toggle-filters" aria-expanded="true" aria-controls="filtros-6"><span>Buscar y filtrar</span><svg class="side-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></button><div class="side-body" id="filtros-6">
+              <div class="side-block">
+                <label class="side-label" for="search-tareas">Buscar</label>
+                <input id="search-tareas" type="search" placeholder="Título, descripción, área…">
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="tarea-filter-label">Estado</p>
+                <div class="chips chips-col" role="group" aria-labelledby="tarea-filter-label">
+                  <button class="chip active" data-tarea-filter="todas" aria-pressed="true">Todas</button>
+                  <button class="chip" data-tarea-filter="pendiente" aria-pressed="false">Pendientes</button>
+                  <button class="chip" data-tarea-filter="hecha" aria-pressed="false">Hechas</button>
+                  <button class="chip" data-tarea-filter="vencida" aria-pressed="false">Vencidas</button>
+                </div>
+              </div>
+              <div class="side-block">
+                <p class="side-label" id="tarea-area-label">Área</p>
+                <div class="chips chips-col" role="group" aria-labelledby="tarea-area-label">
+                  <button class="chip active" data-tarea-area="todas" aria-pressed="true">Todas las áreas</button>
+                  <button class="chip" data-tarea-area="general" aria-pressed="false">General</button>
+                  <button class="chip" data-tarea-area="contabilidad" aria-pressed="false">Contabilidad</button>
+                  <button class="chip" data-tarea-area="ventas" aria-pressed="false">Ventas</button>
+                  <button class="chip" data-tarea-area="cobranza" aria-pressed="false">Cobranza</button>
+                </div>
+              </div></div>
+            </aside>
+            <div class="page-main">
+              <div class="results-bar">
+                <p class="results-count" id="tareas-count" role="status">—</p>
+                <p class="results-hint">Pendientes primero, por fecha límite</p>
+              </div>
+              <div id="tareas-list" class="list-host"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Vista: editor ===== -->
+        <section id="view-editor" hidden>
+          <div class="editor-bar">
+            <div class="editor-bar-nav">
+              <button class="btn small outline" data-action="back"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label-wide">Volver</span></button>
+              <button class="btn small outline section-home editor-home" data-action="go-home" aria-label="Ir al inicio" title="Ir al inicio">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+                <span>Inicio</span>
+              </button>
+            </div>
+            <div class="editor-bar-title">
+              <span id="editor-mode-label">Documento</span>
+            </div>
+            <div class="editor-bar-actions">
+              <button class="btn small primary" data-action="save"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
+              <button class="btn small outline" data-action="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="btn-label-wide">PDF / Imprimir</span><span class="btn-label-compact">PDF</span></button>
+              <button class="btn small outline" data-action="email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg> Enviar</button>
+              <button class="btn small danger" data-action="delete" aria-label="Eliminar documento" title="Eliminar documento"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 3h4a1 1 0 0 1 1 1v2H8V4a1 1 0 0 1 1-1Z"/></svg></button>
+            </div>
+          </div>
+
+          <div class="editor-tabs" role="group" aria-label="Pestañas del editor">
+            <button class="on" data-tab="datos" data-action="tab" aria-pressed="true">Datos</button>
+            <button data-tab="preview" data-action="tab" aria-pressed="false">Vista previa</button>
+          </div>
+
+          <div class="editor-layout">
+            <div class="editor-form" id="editor-form"></div>
+            <div class="editor-preview">
+              <div class="preview-caption"><span>Vista previa</span><span>Letter 8.5 × 11</span></div>
+              <div class="preview-frame" id="preview-frame">
+                <div id="preview-inner"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Navegación principal">
+    <button type="button" class="mobile-nav-item" data-action="go-home" data-nav-view="inicio" aria-label="Inicio">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button type="button" class="mobile-nav-item" data-action="go-docs" data-nav-view="docs" aria-label="Documentos">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+      <span>Archivo</span>
+    </button>
+    <button type="button" class="mobile-nav-item mobile-nav-create" data-action="new-recibo" aria-label="Crear nuevo recibo">
+      <span class="mobile-nav-plus" aria-hidden="true">+</span>
+      <span>Nuevo</span>
+    </button>
+    <button type="button" class="mobile-nav-item" data-action="go-cxc" data-nav-view="cxc" aria-label="Cuentas por cobrar">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5c-.7-.7-1.7-1-3-1-1.4 0-2.5.7-2.5 1.8 0 2.8 5.5 1.1 5.5 4.1 0 1.2-1.2 2.1-2.9 2.1-1.4 0-2.5-.4-3.3-1.2M12 5.5v13"/></svg>
+      <span>Cobros</span>
+    </button>
+    <button type="button" class="mobile-nav-item" data-action="toggle-menu" data-nav-view="menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-pop">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+      <span>Más</span>
+    </button>
+  </nav>
+
+  <!-- ===== Menú a pantalla completa ===== -->
+  <div id="nav-pop" class="nav-pop" role="dialog" aria-modal="true" aria-label="Secciones" hidden>
+    <div class="nav-pop-head">
+      <div class="nav-pop-brand">
+        <span class="brand-mark"><img src="assets/img/marca-clerki.svg" alt="" width="26" height="26"></span>
+        <div>
+          <strong class="brand-wordmark">CLERKI</strong>
+          <span>Tu espacio de trabajo</span>
+        </div>
+      </div>
+      <button type="button" class="icon-btn nav-pop-close" data-action="toggle-menu" aria-label="Cerrar menú" title="Cerrar menú"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+
+    <div class="nav-pop-body">
+      <div>
+        <p class="nav-pop-kicker">Secciones</p>
+        <div class="nav-pop-grid">
+          <button type="button" class="nav-pop-item" data-action="go-home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+            <span>Inicio</span><small>Panel general</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-docs">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+            <span>Documentos</span><small>Recibos y cotizaciones</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-cxc">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5c-.7-.7-1.7-1-3-1-1.4 0-2.5.7-2.5 1.8 0 2.8 5.5 1.1 5.5 4.1 0 1.2-1.2 2.1-2.9 2.1-1.4 0-2.5-.4-3.3-1.2M12 5.5v13"/></svg>
+            <span>Por cobrar</span><small>Saldos por cliente</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-cxp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Por pagar</span><small>Gastos y facturas</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-clientes">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Clientes</span><small>Directorio y prospectos</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-productos">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span>Catálogo</span><small>Productos y servicios</small>
+          </button>
+          <button type="button" class="nav-pop-item" data-action="go-tareas">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>Tareas</span><small>Prioridades y proyectos</small>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <p class="nav-pop-kicker">Cuenta</p>
+        <div class="nav-pop-grid">
+          <button type="button" class="nav-pop-item is-neutral" data-action="settings">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            <span>Ajustes</span><small>Datos del estudio, pagos, textos</small>
+          </button>
+          <button type="button" class="nav-pop-item is-logout" data-action="logout">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Cerrar sesión</span><small>Solo en este dispositivo</small>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-pop-foot">
+      <span>CLERKI</span>
+      <span>Esc para cerrar</span>
+    </div>
+  </div>
+
+  <!-- ===== Modal de ajustes ===== -->
+  <div id="modal-settings" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+    <div class="modal-box modal-wide">
+      <div class="modal-head">
+        <div>
+          <h2 id="modal-settings-title">Ajustes</h2>
+          <p class="modal-sub">Datos del estudio, pagos, textos por defecto y cuenta.</p>
+        </div>
+        <button class="icon-btn" data-action="close-settings" aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div id="settings-body" class="modal-body"></div>
+      <div class="modal-foot">
+        <button class="btn outline" data-action="close-settings">Cancelar</button>
+        <button class="btn primary" data-action="save-settings">Guardar ajustes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Cuentas por Pagar (agregar/editar) ===== -->
+  <div id="modal-cxp" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cxp-title">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h2 id="modal-cxp-title">Nueva cuenta por pagar</h2>
+          <p class="modal-sub">Proveedor, monto, vencimiento y abonos.</p>
+        </div>
+        <button class="icon-btn" data-action="close-cxp-modal" aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="sgrid">
+          <label>Proveedor
+            <input id="cxp-proveedor" type="text" placeholder="Nombre del proveedor">
+          </label>
+          <label>Folio / Factura
+            <input id="cxp-folio" type="text" placeholder="Ej. FAC-001">
+          </label>
+        </div>
+        <label>Concepto
+          <input id="cxp-concepto" type="text" placeholder="Descripción del gasto o servicio">
+        </label>
+        <div class="sgrid">
+          <label>Monto total
+            <input id="cxp-monto" type="number" min="0" step="0.01" placeholder="0.00">
+          </label>
+          <label>Fecha de vencimiento
+            <input id="cxp-vencimiento" type="date">
+          </label>
+        </div>
+        <div class="sgrid">
+          <label>Fecha de emisión
+            <input id="cxp-fecha-emision" type="date">
+          </label>
+          <label>Categoría
+            <select id="cxp-categoria">
+              <option value="material">Material</option>
+              <option value="servicio">Servicio</option>
+              <option value="renta">Renta</option>
+              <option value="servicios">Servicios (luz, agua, etc.)</option>
+              <option value="nomina">Nómina</option>
+              <option value="impuestos">Impuestos</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+        </div>
+        <label>Notas
+          <textarea id="cxp-notas" rows="2" placeholder="Observaciones opcionales"></textarea>
+        </label>
+        <div class="modal-inline-head">
+          <h3>Abonos de pago</h3>
+          <button class="btn outline small" data-action="add-cxp-abono"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Agregar abono</button>
+        </div>
+        <div id="cxp-abonos-list" class="cxp-abonos-list"></div>
+        <div class="abono-foot"><span>Saldo pendiente</span><b id="cxp-saldo">—</b></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn outline" data-action="close-cxp-modal">Cancelar</button>
+        <button class="btn primary" data-action="save-cxp">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Cliente / Prospecto (crear/editar) ===== -->
+  <div id="modal-cliente" class="modal contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-cliente-title">
+    <div class="modal-box contact-sheet">
+      <header class="sheet-top">
+        <button type="button" class="sheet-back" data-action="close-cliente-modal" aria-label="Volver" title="Volver">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg>
+        </button>
+        <div class="sheet-brand">
+          <span class="brand-mark"><img src="assets/img/marca-clerki.svg" alt="" width="24" height="24"></span>
+          <strong class="brand-wordmark">CLERKI</strong>
+        </div>
+        <div class="sheet-top-right">
+          <span class="sync-pill sync-off" id="sheet-sync" aria-hidden="true">Sync</span>
+          <button type="button" class="icon-btn sheet-gear" data-action="sheet-settings" aria-label="Ajustes" title="Ajustes">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="sheet-body">
+        <header class="sheet-intro">
+          <p class="kicker" id="cl-kicker">Nuevo cliente</p>
+          <h2 id="modal-cliente-title">Crear cliente</h2>
+          <p class="sheet-sub" id="cl-sub">Agrega un cliente para gestionar sus cotizaciones, recibos y documentos.</p>
+        </header>
+
+        <div class="seg sheet-seg" id="cli-tipo-seg" role="group" aria-label="Tipo de contacto">
+          <button type="button" class="seg-btn on" data-action="set-cli-tipo" data-cli-tipo="cliente" aria-pressed="true">Cliente</button>
+          <button type="button" class="seg-btn" data-action="set-cli-tipo" data-cli-tipo="prospecto" aria-pressed="false">Prospecto</button>
+        </div>
+
+        <div class="field-stack">
+          <label class="field-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Nombre completo <em aria-hidden="true">*</em></span>
+              <input id="cl-nombre" type="text" placeholder="Ej. Juan Pérez" autocomplete="off">
+            </span>
+          </label>
+
+          <label class="field-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h4a2 2 0 0 1 2 2v10"/><path d="M9 7h2M9 11h2M9 15h2"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Empresa / Negocio</span>
+              <input id="cl-empresa" type="text" placeholder="Ej. Mi Negocio S.A. de C.V." autocomplete="off">
+            </span>
+          </label>
+
+          <label class="field-card" id="cl-rfc-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M7 9h4M7 13h3M17 9h-2v6"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">RFC</span>
+              <input id="cl-rfc" type="text" placeholder="Ej. PEJU900101XXX" autocomplete="off" maxlength="13" spellcheck="false">
+            </span>
+          </label>
+
+          <label class="field-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Teléfono</span>
+              <input id="cl-telefono" type="tel" placeholder="Ej. 55 1234 5678" autocomplete="off">
+            </span>
+          </label>
+
+          <label class="field-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 6 10-6"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Correo electrónico</span>
+              <input id="cl-email" type="email" placeholder="ejemplo@correo.com" autocomplete="off">
+            </span>
+          </label>
+
+          <label class="field-card field-card-area">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Dirección</span>
+              <textarea id="cl-direccion" rows="2" placeholder="Calle, número, colonia, ciudad, estado, CP"></textarea>
+            </span>
+          </label>
+
+          <label class="field-card" id="cl-metodo-card">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M6 15h3"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Método de pago</span>
+              <select id="cl-metodo">
+                <option value="">Selecciona…</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="transferencia">Transferencia</option>
+                <option value="tarjeta_credito">Tarjeta de crédito</option>
+                <option value="tarjeta_debito">Tarjeta de débito</option>
+                <option value="cheque">Cheque</option>
+                <option value="otro">Otro</option>
+              </select>
+            </span>
+          </label>
+
+          <label class="field-card" id="cl-origen-card" hidden>
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Origen del prospecto</span>
+              <select id="cl-origen">
+                <option value="">Selecciona…</option>
+                <option value="recomendacion">Recomendación</option>
+                <option value="redes">Redes sociales</option>
+                <option value="sitio">Sitio web</option>
+                <option value="cliente_existente">Cliente existente</option>
+                <option value="evento">Evento o feria</option>
+                <option value="publicidad">Publicidad</option>
+                <option value="otro">Otro</option>
+              </select>
+            </span>
+          </label>
+
+          <div class="field-pair" id="cl-seguimiento-pair" hidden>
+            <label class="field-card">
+              <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></span>
+              <span class="field-body">
+                <span class="field-label">Fecha de seguimiento</span>
+                <input id="cl-seguimiento" type="date">
+              </span>
+            </label>
+            <label class="field-card">
+              <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="field-body">
+                <span class="field-label">Estado</span>
+                <select id="cl-estado">
+                  <option value="nuevo">Nuevo</option>
+                  <option value="contactado">Contactado</option>
+                  <option value="negociacion">En negociación</option>
+                  <option value="ganado">Ganado ✓</option>
+                  <option value="perdido">Perdido</option>
+                </select>
+              </span>
+            </label>
+          </div>
+
+          <label class="field-card field-card-area">
+            <span class="field-ico" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+            <span class="field-body">
+              <span class="field-label">Notas</span>
+              <textarea id="cl-notas" rows="3" placeholder="Referencias, servicios de interés, seguimiento…"></textarea>
+            </span>
+          </label>
+        </div>
+
+        <p class="sheet-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/></svg>
+          <span>Los contactos se reutilizan en recibos y cotizaciones, y viajan con tu cuenta entre dispositivos.</span>
+        </p>
+      </div>
+
+      <footer class="sheet-foot">
+        <button type="button" class="btn outline sheet-cancel" data-action="close-cliente-modal">Cancelar</button>
+        <button type="button" class="btn primary sheet-save" data-action="save-cliente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span id="cl-save-label">Guardar cliente</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Producto / Servicio del catálogo ===== -->
+  <div id="modal-producto" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-producto-title">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h2 id="modal-producto-title">Nuevo producto</h2>
+          <p class="modal-sub">Precio por unidad, unidad de medida y características.</p>
+        </div>
+        <button class="icon-btn" data-action="close-producto-modal" aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <label>Tipo de ítem</label>
+        <div class="seg" id="prod-tipo-seg" role="group" aria-label="Tipo de ítem">
+          <button type="button" class="seg-btn on" data-action="set-prod-tipo" data-prod-tipo="producto">Producto</button>
+          <button type="button" class="seg-btn" data-action="set-prod-tipo" data-prod-tipo="servicio">Servicio</button>
+        </div>
+        <label>Nombre *
+          <input id="pr-nombre" type="text" placeholder="Ej. Tarjeta de presentación" autocomplete="off">
+        </label>
+        <div class="sgrid">
+          <label>Precio por unidad *
+            <input id="pr-precio" type="number" min="0" step="0.01" placeholder="0.00">
+          </label>
+          <label>Unidad de medida
+            <input id="pr-unidad" type="text" list="unidades-list" placeholder="Ej. pza" autocomplete="off">
+          </label>
+        </div>
+        <label>Características <span class="hint">una por línea</span>
+          <textarea id="pr-caracteristicas" rows="4" placeholder="Papel couché 300 g&#10;Full color ambos lados&#10;Acabado mate"></textarea>
+        </label>
+        <label>Clave / SKU <span class="hint">(opcional)</span>
+          <input id="pr-sku" type="text" placeholder="Ej. TAR-300" autocomplete="off">
+        </label>
+        <label>Notas <span class="hint">(opcional, no se imprimen)</span>
+          <textarea id="pr-notas" rows="2" placeholder="Proveedor, márgenes, tiempos…"></textarea>
+        </label>
+        <p class="hint">Al agregarlo a un recibo o cotización se copian el precio por unidad, la unidad de medida y las características. Las características se imprimen debajo del concepto.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn outline" data-action="close-producto-modal">Cancelar</button>
+        <button class="btn primary" data-action="save-producto">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Tarea (agregar/editar) ===== -->
+  <div id="modal-tarea" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-tarea-title">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h2 id="modal-tarea-title">Nueva tarea</h2>
+          <p class="modal-sub">Área, prioridad, fecha límite y documento asociado.</p>
+        </div>
+        <button class="icon-btn" data-action="close-tarea-modal" aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <label>Título *
+          <input id="ta-titulo" type="text" placeholder="Ej. Enviar factura a cliente" autocomplete="off">
+        </label>
+        <label>Descripción
+          <textarea id="ta-desc" rows="3" placeholder="Detalles, pasos, notas…"></textarea>
+        </label>
+        <div class="sgrid">
+          <label>Área
+            <select id="ta-area">
+              <option value="general">General</option>
+              <option value="contabilidad">Contabilidad</option>
+              <option value="ventas">Ventas</option>
+              <option value="cobranza">Cobranza</option>
+            </select>
+          </label>
+          <label>Prioridad
+            <select id="ta-prioridad">
+              <option value="mid">Media</option>
+              <option value="high">Alta</option>
+              <option value="low">Baja</option>
+            </select>
+          </label>
+        </div>
+        <div class="sgrid">
+          <label>Fecha límite
+            <input id="ta-deadline" type="date">
+          </label>
+          <label>Documento asociado
+            <select id="ta-doc">
+              <option value="">— Ninguno —</option>
+            </select>
+          </label>
+        </div>
+        <label class="toggle toggle-inline">
+          <input id="ta-done" type="checkbox"> <span>Marcar como hecha</span>
+        </label>
+        <p class="hint">Las pendientes aparecen en el To-Do del inicio, agrupadas por área, y se sincronizan entre tus equipos.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn outline" data-action="close-tarea-modal">Cancelar</button>
+        <button class="btn primary" data-action="save-tarea">Guardar tarea</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Unidades de medida sugeridas ===== -->
+  <datalist id="unidades-list">
+    <option value="pza"></option>
+    <option value="pieza"></option>
+    <option value="servicio"></option>
+    <option value="proyecto"></option>
+    <option value="hora"></option>
+    <option value="día"></option>
+    <option value="mes"></option>
+    <option value="sesión"></option>
+    <option value="kg"></option>
+    <option value="g"></option>
+    <option value="litro"></option>
+    <option value="m"></option>
+    <option value="m²"></option>
+    <option value="cm"></option>
+    <option value="hoja"></option>
+    <option value="juego"></option>
+    <option value="lote"></option>
+    <option value="caja"></option>
+    <option value="paquete"></option>
+    <option value="rollo"></option>
+    <option value="juego de archivos"></option>
+  </datalist>
+
+  <!-- ===== Búsqueda global (Ctrl/⌘ + K) ===== -->
+  <div id="cmdk" class="cmdk" role="dialog" aria-modal="true" aria-label="Buscar" hidden>
+    <div class="cmdk-box">
+      <div class="cmdk-head">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="cmdk-input" class="cmdk-input" type="search" placeholder="Buscar documentos, clientes, gastos, catálogo, tareas…"
+               autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list">
+        <button type="button" class="cmdk-hint" data-action="close-cmdk" aria-label="Cerrar la búsqueda">esc</button>
+      </div>
+      <div id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Resultados"></div>
+      <div class="cmdk-foot">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+        <span><kbd>↵</kbd> abrir</span>
+        <span><kbd>esc</kbd> cerrar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Puerta de cuenta (sincronización) ===== -->
+  <div id="auth-gate" class="auth-gate" role="main" aria-labelledby="auth-heading" hidden>
+    <div class="auth-shell">
+      <div class="auth-showcase">
+        <span class="auth-showcase-brand"><span class="brand-mark is-lime"><img src="assets/img/marca-clerki.svg" alt="" class="brand-logo"></span>CLERKI</span>
+        <div class="auth-showcase-copy">
+          <p class="kicker">Tu espacio para crear</p>
+          <h2>Tu estudio.<br><span>Sin límites.</span></h2>
+          <p>De la primera idea al último pago.<br>Más claridad para hacer lo que amas.</p>
+        </div>
+        <div class="auth-features">
+          <div class="auth-feature"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8ZM14 2v6h6M8 14h8M8 18h5"/></svg></span><div><strong>Cotiza. Cobra. Crea.</strong><small>Tus proyectos, conectados de principio a fin.</small></div></div>
+          <div class="auth-feature"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M5 19h8M9 15v4"/><rect x="16" y="10" width="6" height="11" rx="1.5"/></svg></span><div><strong>Tu ritmo, en cualquier pantalla.</strong><small>Del celular a tu computadora, sin perder el hilo.</small></div></div>
+        </div>
+        <span class="auth-showcase-foot"><span aria-hidden="true"></span> CLERKI · Recibos &amp; Cotizaciones</span>
+        <svg class="auth-orbits" viewBox="0 0 400 400" fill="none" aria-hidden="true"><circle cx="200" cy="200" r="160" stroke="currentColor"/><circle cx="200" cy="200" r="112" stroke="currentColor" stroke-dasharray="3 8"/><ellipse cx="200" cy="200" rx="194" ry="74" stroke="currentColor" transform="rotate(-38 200 200)"/></svg>
+      </div>
+      <div class="auth-card">
+        <div class="auth-brand">
+          <span class="brand-mark is-lime"><img src="assets/img/marca-clerki.svg" alt="" class="brand-logo"></span>
+          <strong class="brand-wordmark">CLERKI</strong>
+        </div>
+        <p class="kicker auth-kicker">Bienvenido a tu espacio</p>
+        <h1 class="auth-title" id="auth-heading">Todo empieza aquí.</h1>
+        <p class="auth-sub">Ingresa o crea una cuenta. Tus recibos, clientes y proyectos te acompañan en todos tus equipos.</p>
+        <div class="auth-tabs" role="group" aria-label="Ingresar o crear cuenta">
+          <button type="button" class="on" data-auth-tab="login" aria-pressed="true">Ingresar</button>
+          <button type="button" data-auth-tab="register" aria-pressed="false">Crear cuenta</button>
+        </div>
+        <form id="auth-form-login" novalidate>
+          <label>Email
+            <input name="email" type="email" autocomplete="email" placeholder="tu@email.com" required>
+          </label>
+          <label>Contraseña
+            <input name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+          </label>
+          <p id="auth-login-error" class="auth-error"></p>
+          <button class="btn primary wide" type="submit">Ingresar</button>
+        </form>
+        <form id="auth-form-register" novalidate hidden>
+          <label>Email
+            <input name="email" type="email" autocomplete="email" placeholder="tu@email.com" required>
+          </label>
+          <label>Contraseña (mínimo 6 caracteres)
+            <input name="password" type="password" autocomplete="new-password" placeholder="••••••••" required>
+          </label>
+          <p id="auth-register-error" class="auth-error"></p>
+          <button class="btn primary wide" type="submit">Crear cuenta</button>
+        </form>
+        <p class="auth-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/></svg><span>Un espacio privado. Tu cuenta protege el acceso a tus datos.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Área de impresión ===== -->
+  <div id="print-area"></div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/layout.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "clerki",
+  "private": true,
+  "description": "PWA de Recibos y Cotizaciones — CLERKI (con sync vía Vercel Functions + Postgres)",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0",
+    "sharp": "^0.34.4"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "preview": "node scripts/dev-server.mjs --demo",
+    "audit": "node scripts/audit.mjs",
+    "icons": "node scripts/icons.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  }
+}
