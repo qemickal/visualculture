@@ -2564,6 +2564,10 @@
             ${cuenta ? '<button class="btn small outline" data-action="logout">Cerrar sesión</button>' : ''}
           </div>
           <p class="hint">Los recibos, cotizaciones, contactos, catálogo y tareas viajan con tu cuenta.</p>
+          <div class="account-row data-danger-zone">
+            <span><b>Borrar todos los datos</b><br><small>Elimina los datos guardados en este dispositivo y, si tienes sesión, también los sincronizados en tu cuenta. No elimina tu cuenta.</small></span>
+            <button class="btn small danger" data-action="clear-all-data">Borrar todo</button>
+          </div>
         </section>
       </div>
     `;
@@ -2978,6 +2982,24 @@
         break;
       }
 
+      case 'clear-all-data': {
+        if (!confirm('¿Borrar definitivamente todos los datos guardados en este dispositivo y, si has iniciado sesión, también los de tu cuenta sincronizada? Esta acción no se puede deshacer.')) break;
+        const clearBtn = btn;
+        clearBtn.disabled = true;
+        clearBtn.textContent = 'Borrando…';
+        if (!window.SYNC || !window.SYNC.clearAllData) {
+          clearBtn.disabled = false;
+          clearBtn.textContent = 'Borrar todo';
+          toast('No se pudo iniciar el borrado.');
+          break;
+        }
+        window.SYNC.clearAllData().catch((err) => {
+          clearBtn.disabled = false;
+          clearBtn.textContent = 'Borrar todo';
+          toast('No se borraron los datos: ' + (err.message || 'error de conexión'));
+        });
+        break;
+      }
       case 'logout':
         closeNavPop();
         if (window.SYNC) window.SYNC.logout();

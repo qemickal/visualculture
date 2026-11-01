@@ -2669,3 +2669,76 @@ body.in-editor .mobile-nav, body.auth-open .mobile-nav { display: none; }
     print-color-adjust: exact;
   }
 }
+
+.data-danger-zone { margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+.data-danger-zone small { display:inline-block; max-width:54ch; margin-top:4px; color:var(--ink-3); line-height:1.5; }
+
+/* VISUAL CULTURE · interfaz compacta de vidrio azul/teal */
+:root {
+  --ink: #102a43;
+  --bg: #edf5fb;
+  --surface: rgba(255,255,255,.68);
+  --surface-2: rgba(255,255,255,.48);
+  --surface-3: rgba(46,119,186,.09);
+  --line: rgba(80,145,190,.18);
+  --line-2: rgba(80,145,190,.24);
+  --slate-600: #1768c5;
+  --lime: #20b9aa;
+  --gap: 10px;
+}
+body {
+  background:
+    radial-gradient(ellipse at 8% 5%, rgba(74,145,228,.15), transparent 36rem),
+    radial-gradient(ellipse at 96% 35%, rgba(55,211,196,.14), transparent 34rem),
+    #edf5fb;
+}
+#topbar {
+  display:flex; flex-wrap:wrap; justify-content:center; gap:5px 14px;
+  min-height:0; padding:10px var(--pad-x) 8px;
+  background:rgba(247,251,255,.75); border:0;
+  box-shadow:0 8px 28px rgba(27,77,120,.07);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+}
+#topbar .brand { flex:0 0 100%; justify-content:center; gap:0; text-align:center; }
+#topbar .brand-mark { display:none; }
+#topbar .brand-text { align-items:center; gap:2px; }
+#topbar .brand-text strong { font-size:clamp(21px,3vw,29px); line-height:1; letter-spacing:-.055em; }
+#topbar .brand-text > span { font-size:9px; letter-spacing:.15em; color:#35617d; }
+#topbar .top-nav { order:2; margin:0; }
+#topbar .topbar-right { position:absolute; right:var(--pad-x); top:10px; }
+#topbar .topbar-actions .icon-btn { width:38px;height:38px;min-width:38px;min-height:38px;border:1px solid var(--line);background:var(--surface);border-radius:14px; }
+#topbar .sync-pill { display:none; }
+main { width:min(100% - 24px, 1120px); margin-inline:auto; }
+.card, .kpi-card, .quick-tile, .ord-panel, .next-card, .figs-panel, .page-side,
+.table-wrap, .panel, .modal-card, .workspace-card {
+  background:rgba(255,255,255,.57) !important;
+  border:1px solid rgba(255,255,255,.8) !important;
+  border-radius:18px !important;
+  box-shadow:0 8px 22px rgba(30,83,123,.08), inset 0 1px 0 rgba(255,255,255,.72) !important;
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+}
+#view-inicio { padding-top:12px; }
+#view-inicio h1,#view-inicio h2 { letter-spacing:-.035em; }
+#view-inicio h1 { font-size:clamp(23px,3vw,32px); }
+#view-inicio h2 { font-size:17px; }
+#view-inicio .kpi-label,.kpi-label { font-size:12px; }
+#view-inicio .kpi-value { font-size:clamp(20px,2.5vw,27px); }
+.chip, .badge, .status-chip, .tag {
+  border:0 !important; box-shadow:none !important; background:transparent !important;
+  padding-inline:5px; color:var(--ink-2);
+}
+.chip::before, .badge::before, .status-chip::before, .tag::before {
+  content:""; display:inline-block; width:7px;height:7px; margin-right:6px;
+  border-radius:50%; background:currentColor; border:0;
+}
+.chip.active { color:#1768c5 !important; background:transparent !important; }
+.chip.active::before { background:#1768c5 !important; }
+button, input, select, textarea { font-family:var(--sans); }
+@media (max-width:760px) {
+  #topbar { padding:12px 12px 8px; }
+  #topbar .brand { padding-inline:44px; }
+  #topbar .brand-text strong { font-size:23px; }
+  #topbar .topbar-right { right:12px; top:10px; }
+  #topbar .top-nav { display:none; }
+  main { width:calc(100% - 20px); }
+}
