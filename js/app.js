@@ -75,6 +75,8 @@
   let tareaFilter = 'todas'; // 'todas' | 'pendiente' | 'hecha' | 'vencida'
   let tareaArea = 'todas'; // 'todas' | 'general' | 'contabilidad' | 'ventas' | 'cobranza'
   let tareaQuery = '';
+  let tareaDateFilter = '';
+  var tareaCalendarMonth = (function () { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
   let mainView = 'inicio';  // 'inicio' | 'docs' | 'cxc' | 'cxp' | 'clientes' | 'productos' | 'tareas'
   let previousView = 'inicio'; // vista antes de entrar al editor
   let cxpFilter = 'todas';
@@ -1796,6 +1798,59 @@
     sel.innerHTML = opts.join('');
   }
 
+  function tareaISODate(date) {
+    return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+  }
+
+  function renderTareaCalendar() {
+    var host = $('#tarea-calendar');
+    if (!host) return;
+    var year = tareaCalendarMonth.getFullYear();
+    var month = tareaCalendarMonth.getMonth();
+    var first = new Date(year, month, 1);
+    var offset = (first.getDay() + 6) % 7; // semana inicia lunes
+    var start = new Date(year, month, 1 - offset);
+    var monthName = new Intl.DateTimeFormat('es-MX', { month: 'long', year: 'numeric' }).format(first);
+    monthName = monthName.charAt(0).toLocaleUpperCase('es-MX') + monthName.slice(1);
+    var counts = {};
+    tareas.forEach(function (t) {
+      if (!t.deadline) return;
+      (counts[t.deadline] || (counts[t.deadline] = [])).push(t);
+    });
+    var days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    var html = '<header class="tarea-calendar-head"><div><p class="kicker">Agenda</p><h2>' + esc(monthName) + '</h2></div>'
+      + '<div class="tarea-calendar-controls">'
+      + '<button type="button" class="icon-btn" data-action="tarea-cal-prev" aria-label="Mes anterior" title="Mes anterior">‹</button>'
+      + '<button type="button" class="btn small outline" data-action="tarea-cal-today">Hoy</button>'
+      + '<button type="button" class="icon-btn" data-action="tarea-cal-next" aria-label="Mes siguiente" title="Mes siguiente">›</button>'
+      + '</div></header>'
+      + '<div class="tarea-calendar-grid" role="grid" aria-label="' + esc(monthName) + '">'
+      + days.map(function (d) { return '<span class="tarea-calendar-weekday" role="columnheader">' + d + '</span>'; }).join('');
+    for (var i = 0; i < 42; i++) {
+      var date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+      var iso = tareaISODate(date);
+      var inMonth = date.getMonth() === month;
+      var taskList = counts[iso] || [];
+      var classes = 'tarea-calendar-day' + (inMonth ? '' : ' is-outside')
+        + (iso === window.todayISO() ? ' is-today' : '')
+        + (iso === tareaDateFilter ? ' is-selected' : '');
+      var taskLabel = taskList.length ? ', ' + taskList.length + ' tarea' + (taskList.length === 1 ? '' : 's') : ', sin tareas';
+      html += '<button type="button" role="gridcell" aria-label="' + esc(date.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) + taskLabel)
+        + '" aria-pressed="' + (iso === tareaDateFilter) + '" class="' + classes + '" data-action="tarea-cal-day" data-date="' + iso + '">'
+        + '<span class="tarea-calendar-num">' + date.getDate() + '</span>'
+        + (taskList.length ? '<span class="tarea-calendar-dots" aria-hidden="true">' + taskList.slice(0, 3).map(function (t) {
+          return '<i class="' + (t.done ? 'is-done' : t.prioridad === 'high' ? 'is-high' : '') + '"></i>';
+        }).join('') + (taskList.length > 3 ? '<small>+' + (taskList.length - 3) + '</small>' : '') + '</span>' : '')
+        + '</button>';
+    }
+    html += '</div><div class="tarea-calendar-foot"><span>'
+      + (tareaDateFilter ? 'Mostrando tareas del ' + esc(window.fmtDate(tareaDateFilter)) : 'Selecciona un día para ver sus tareas')
+      + '</span>'
+      + (tareaDateFilter ? '<button type="button" class="btn small quiet" data-action="tarea-cal-clear">Ver todas</button>' : '')
+      + '</div>';
+    host.innerHTML = html;
+  }
+
   function renderTareas() {
     var wrap = $('#tareas-list');
     var summary = $('#tareas-summary');
@@ -1816,7 +1871,8 @@
       else if (tareaFilter === 'vencida') okEstado = !t.done && t.deadline && t.deadline < hoy;
       var okArea = true;
       if (tareaArea !== 'todas') okArea = (t.area || 'general') === tareaArea;
-      return okQ && okEstado && okArea;
+      var okDate = !tareaDateFilter || t.deadline === tareaDateFilter;
+      return okQ && okEstado && okArea && okDate;
     }).sort(function (a, b) {
       // pendientes primero, luego por deadline (null al final), luego prioridad alta, luego actualizado
       if (!!a.done !== !!b.done) return a.done ? 1 : -1;
@@ -1832,6 +1888,7 @@
 
     paintChips('.chip[data-tarea-filter]', 'tareaFilter', tareaFilter);
     paintChips('.chip[data-tarea-area]', 'tareaArea', tareaArea);
+    renderTareaCalendar();
 
     // resumen integrado en la cabecera de la vista
     var pendientes = tareas.filter(function (t) { return !t.done; }).length;
@@ -2970,6 +3027,34 @@
 
       /* --- Tareas --- */
       case 'new-tarea': openTareaModal(null); break;
+      case 'tarea-cal-prev':
+        tareaCalendarMonth = new Date(tareaCalendarMonth.getFullYear(), tareaCalendarMonth.getMonth() - 1, 1);
+        tareaDateFilter = '';
+        renderTareas();
+        break;
+      case 'tarea-cal-next':
+        tareaCalendarMonth = new Date(tareaCalendarMonth.getFullYear(), tareaCalendarMonth.getMonth() + 1, 1);
+        tareaDateFilter = '';
+        renderTareas();
+        break;
+      case 'tarea-cal-today': {
+        var currentDate = new Date();
+        tareaCalendarMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        tareaDateFilter = '';
+        renderTareas();
+        break;
+      }
+      case 'tarea-cal-day': {
+        tareaDateFilter = btn.dataset.date || '';
+        var picked = tareaDateFilter.split('-').map(Number);
+        if (picked.length === 3) tareaCalendarMonth = new Date(picked[0], picked[1] - 1, 1);
+        renderTareas();
+        break;
+      }
+      case 'tarea-cal-clear':
+        tareaDateFilter = '';
+        renderTareas();
+        break;
       case 'edit-tarea': openTareaModal(btn.dataset.id); break;
       case 'del-tarea': deleteTarea(btn.dataset.id); break;
       case 'toggle-tarea': toggleTareaDone(btn.dataset.id); break;
