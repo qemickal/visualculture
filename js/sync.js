@@ -336,16 +336,18 @@
   /* ---------------- Bucle de sincronización ---------------- */
   let inFlight = false;
   let queued = false;
+  let clearingData = false;
   let debounceT = null;
 
   function queueSync() {
-    if (!authed()) return;
+    if (clearingData || !authed()) return;
     if (typeof navigator !== 'undefined' && !navigator.onLine) { state = 'offl'; pill(); return; }
     clearTimeout(debounceT);
     debounceT = setTimeout(() => runSync(true), 800);
   }
 
   async function runSync(immediate) {
+    if (clearingData) return;
     if (!authed()) { state = 'off'; pill(); return; }
     if (inFlight) { queued = true; return; }
     inFlight = true;
@@ -393,12 +395,38 @@
     if (!document.hidden) queueSync();
   });
 
+  async function clearAllData() {
+    if (clearingData) throw new Error('BORRADO_EN_CURSO');
+    clearingData = true;
+    clearTimeout(debounceT);
+    try {
+      // Deja terminar una sincronización que ya hubiera empezado antes del borrado.
+      while (inFlight) await new Promise((resolve) => setTimeout(resolve, 40));
+      if (authed()) {
+        const token = lsGet(TOKEN_KEY, null);
+        const res = await fetch('/api/sync', {
+          method: 'DELETE',
+          headers: token ? { Authorization: 'Bearer ' + token } : {}
+        });
+        let body = null;
+        try { body = await res.json(); } catch (e) {}
+        if (!res.ok) throw new Error((body && body.error) || ('HTTP' + res.status));
+      }
+      ['mc_docs', 'mc_settings', 'mc_clientes', 'mc_cxp', 'mc_productos', 'mc_tareas',
+       'mc_home_done', TOMB_KEY, META_KEY].forEach(lsDel);
+      window.location.reload();
+    } finally {
+      clearingData = false;
+    }
+  }
+
   /* ---------------- API pública ---------------- */
   window.SYNC = {
     authed,
     accountEmail,
     showAuth,
     logout: doLogout,
+    clearAllData,
     localChanged: queueSync,
     tombstone,
     setRemoteHandler: (fn) => { remoteHandler = fn; },

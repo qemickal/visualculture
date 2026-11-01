@@ -1,6 +1,6 @@
 {
-  "name": "CLERKI — Recibos & Cotizaciones",
-  "short_name": "CLERKI",
+  "name": "VISUAL CULTURE — Recibos & Cotizaciones",
+  "short_name": "VISUAL CULTURE",
   "description": "Crea, guarda, imprime y envía recibos y cotizaciones.",
   "start_url": "./index.html",
   "scope": "./",

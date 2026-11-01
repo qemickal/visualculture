@@ -80,6 +80,10 @@ module.exports = async function (req, res) {
 
     if (req.method === 'GET') return await pull(req, res, user);
     if (req.method === 'POST') return await push(req, res, user);
+    if (req.method === 'DELETE') {
+      await L.db().query('DELETE FROM app_records WHERE owner_email = $1', [user.email]);
+      return L.json(res, 200, { deleted: true });
+    }
     L.json(res, 405, { error: 'METHOD_NOT_ALLOWED' });
   } catch (e) {
     L.json(res, 500, { error: 'SERVIDOR' });
